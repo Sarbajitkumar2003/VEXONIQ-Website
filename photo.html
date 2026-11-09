@@ -1,0 +1,452 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#11120f">
+    <meta name="description" content="VEXONIQ Photo Studio - Professional browser-based image editing workspace.">
+    <title>VEXONIQ PHOTO STUDIO</title>
+    <link rel="stylesheet" href="photo.css">
+</head>
+<body>
+
+<header class="topbar">
+    <a href="index.html" class="brand">VEXONIQ<span>®</span></a>
+
+    <div class="studio-name">
+        PHOTO STUDIO <span>/ IMAGE WORKSPACE</span>
+    </div>
+
+    <div class="top-actions">
+        <button id="undoBtn" class="top-btn">↶ Undo</button>
+        <button id="redoBtn" class="top-btn">↷ Redo</button>
+        <button id="resetBtn" class="top-btn">Reset</button>
+        <button id="exportBtn" class="export-btn">EXPORT ↗</button>
+    </div>
+</header>
+
+<main class="editor">
+
+    <!-- APPLICATION MENU -->
+    <section class="menu-row">
+
+        <div class="menu-left">
+
+            <!-- FILE -->
+            <div class="menu-dropdown">
+                <button class="menu-trigger" type="button">
+                    FILE <span>⌄</span>
+                </button>
+
+                <div class="dropdown-content">
+                    <button type="button" data-action="open">
+                        Open Image <kbd>Ctrl + O</kbd>
+                    </button>
+                    <button type="button" data-action="export">
+                        Export Image <kbd>Ctrl + Shift + S</kbd>
+                    </button>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" data-action="reset">
+                        Reset Workspace
+                    </button>
+                </div>
+            </div>
+
+            <!-- EDIT -->
+            <div class="menu-dropdown">
+                <button class="menu-trigger" type="button">
+                    EDIT <span>⌄</span>
+                </button>
+
+                <div class="dropdown-content">
+                    <button type="button" data-action="undo">
+                        Undo <kbd>Ctrl + Z</kbd>
+                    </button>
+                    <button type="button" data-action="redo">
+                        Redo <kbd>Ctrl + Y</kbd>
+                    </button>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" data-action="reset-adjustments">
+                        Reset Adjustments
+                    </button>
+                </div>
+            </div>
+
+            <!-- IMAGE -->
+            <div class="menu-dropdown">
+                <button class="menu-trigger" type="button">
+                    IMAGE <span>⌄</span>
+                </button>
+
+                <div class="dropdown-content">
+                    <button type="button" data-action="rotate-left">
+                        Rotate Left
+                    </button>
+                    <button type="button" data-action="rotate-right">
+                        Rotate Right
+                    </button>
+                    <button type="button" data-action="flip-h">
+                        Flip Horizontal
+                    </button>
+                    <button type="button" data-action="flip-v">
+                        Flip Vertical
+                    </button>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" data-action="crop">
+                        Crop Image
+                    </button>
+                </div>
+            </div>
+
+            <!-- LAYER -->
+            <div class="menu-dropdown">
+                <button class="menu-trigger" type="button">
+                    LAYER <span>⌄</span>
+                </button>
+
+                <div class="dropdown-content">
+                    <button type="button" data-action="add-text">
+                        New Text Layer
+                    </button>
+                    <button type="button" data-action="show-layers">
+                        Show Layers Panel
+                    </button>
+                </div>
+            </div>
+
+            <!-- FILTER -->
+            <div class="menu-dropdown">
+                <button class="menu-trigger" type="button">
+                    FILTER <span>⌄</span>
+                </button>
+
+                <div class="dropdown-content">
+                    <button type="button" data-filter-action="normal">
+                        Original
+                    </button>
+                    <button type="button" data-filter-action="mono">
+                        Black & White
+                    </button>
+                    <button type="button" data-filter-action="vintage">
+                        Vintage
+                    </button>
+                    <button type="button" data-filter-action="cinematic">
+                        Cinematic
+                    </button>
+                    <button type="button" data-filter-action="warm">
+                        Warm
+                    </button>
+                    <button type="button" data-filter-action="cool">
+                        Cool
+                    </button>
+                </div>
+            </div>
+
+            <!-- VIEW -->
+            <div class="menu-dropdown">
+                <button class="menu-trigger" type="button">
+                    VIEW <span>⌄</span>
+                </button>
+
+                <div class="dropdown-content">
+                    <button type="button" data-action="zoom-in">
+                        Zoom In
+                    </button>
+                    <button type="button" data-action="zoom-out">
+                        Zoom Out
+                    </button>
+                    <button type="button" data-action="fit">
+                        Fit to Screen
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="document-name" id="documentName">
+            Untitled Design
+        </div>
+
+        <div class="menu-right">
+            <button id="openImageBtn" type="button">
+                ＋ OPEN IMAGE
+            </button>
+            <input type="file" id="imageInput" accept="image/*" hidden>
+        </div>
+
+    </section>
+
+    <!-- MAIN WORKSPACE -->
+    <section class="workspace">
+
+        <!-- LEFT TOOLBAR -->
+        <aside class="toolbar">
+
+            <button class="tool active" data-tool="move" title="Move" type="button">↖</button>
+            <button class="tool" data-tool="crop" title="Crop" type="button">⌗</button>
+            <button class="tool" data-tool="brush" title="Brush" type="button">✎</button>
+            <button class="tool" data-tool="eraser" title="Eraser" type="button">◩</button>
+            <button class="tool" data-tool="text" title="Text" type="button">T</button>
+            <button class="tool" data-tool="shape" title="Rectangle" type="button">□</button>
+
+            <div class="tool-divider"></div>
+
+            <label class="color-picker" title="Brush colour">
+                <input type="color" id="brushColor" value="#d7ff35">
+                <span>COLOR</span>
+            </label>
+
+            <div class="brush-size">
+                <span>SIZE</span>
+                <input type="range" id="brushSize" min="1" max="80" value="12">
+                <output id="brushSizeValue">12</output>
+            </div>
+
+        </aside>
+
+        <!-- CANVAS AREA -->
+        <section class="canvas-section">
+
+            <div class="canvas-toolbar">
+
+                <span id="toolStatus">MOVE TOOL</span>
+
+                <div class="zoom-controls">
+                    <button id="zoomOut" type="button">−</button>
+                    <span id="zoomValue">100%</span>
+                    <button id="zoomIn" type="button">+</button>
+                    <button id="fitBtn" type="button">FIT</button>
+                </div>
+
+            </div>
+
+            <div class="canvas-stage" id="canvasStage">
+
+                <div class="canvas-placeholder" id="placeholder">
+
+                    <div class="upload-symbol">＋</div>
+
+                    <h2>Start creating.</h2>
+
+                    <p>
+                        Drop an image here or open a file to begin editing.
+                    </p>
+
+                    <button id="placeholderUpload" type="button">
+                        OPEN IMAGE ↗
+                    </button>
+
+                    <small>
+                        Supports JPG, PNG, WEBP and other browser-supported images
+                    </small>
+
+                </div>
+
+                <canvas id="photoCanvas" width="1200" height="800"></canvas>
+
+                <div id="cropBox" class="crop-box"></div>
+
+            </div>
+
+            <div class="canvas-footer">
+                <span id="imageDimensions">NO IMAGE LOADED</span>
+                <span>VEXONIQ IMAGE ENGINE</span>
+            </div>
+
+        </section>
+
+        <!-- RIGHT PROPERTIES PANEL -->
+        <aside class="properties-panel">
+
+            <div class="panel-tabs">
+
+                <button class="panel-tab active" data-panel="adjustments" type="button">
+                    ADJUST
+                </button>
+
+                <button class="panel-tab" data-panel="filters" type="button">
+                    FILTERS
+                </button>
+
+                <button class="panel-tab" data-panel="layers" type="button">
+                    LAYERS
+                </button>
+
+            </div>
+
+            <!-- ADJUSTMENTS -->
+            <div class="panel-content active" id="adjustmentsPanel">
+
+                <div class="panel-heading">
+                    <span>IMAGE ADJUSTMENTS</span>
+                    <button id="resetAdjustments" type="button">RESET</button>
+                </div>
+
+                <div class="adjust-control">
+                    <div>
+                        <label>Brightness</label>
+                        <output id="brightnessValue">100%</output>
+                    </div>
+                    <input type="range" id="brightness" min="0" max="200" value="100">
+                </div>
+
+                <div class="adjust-control">
+                    <div>
+                        <label>Contrast</label>
+                        <output id="contrastValue">100%</output>
+                    </div>
+                    <input type="range" id="contrast" min="0" max="200" value="100">
+                </div>
+
+                <div class="adjust-control">
+                    <div>
+                        <label>Saturation</label>
+                        <output id="saturationValue">100%</output>
+                    </div>
+                    <input type="range" id="saturation" min="0" max="200" value="100">
+                </div>
+
+                <div class="adjust-control">
+                    <div>
+                        <label>Blur</label>
+                        <output id="blurValue">0px</output>
+                    </div>
+                    <input type="range" id="blur" min="0" max="20" value="0">
+                </div>
+
+                <div class="adjust-control">
+                    <div>
+                        <label>Grayscale</label>
+                        <output id="grayscaleValue">0%</output>
+                    </div>
+                    <input type="range" id="grayscale" min="0" max="100" value="0">
+                </div>
+
+                <div class="adjust-control">
+                    <div>
+                        <label>Sepia</label>
+                        <output id="sepiaValue">0%</output>
+                    </div>
+                    <input type="range" id="sepia" min="0" max="100" value="0">
+                </div>
+
+                <div class="panel-heading transform-heading">
+                    <span>TRANSFORM</span>
+                </div>
+
+                <div class="transform-buttons">
+                    <button id="rotateLeft" type="button">↶ Rotate</button>
+                    <button id="rotateRight" type="button">↷ Rotate</button>
+                    <button id="flipH" type="button">↔ Flip H</button>
+                    <button id="flipV" type="button">↕ Flip V</button>
+                </div>
+
+            </div>
+
+            <!-- FILTERS -->
+            <div class="panel-content" id="filtersPanel">
+
+                <div class="panel-heading">
+                    <span>CREATIVE FILTERS</span>
+                </div>
+
+                <div class="filter-grid">
+
+                    <button class="filter-card" data-filter="normal" type="button">
+                        <span class="filter-preview normal"></span>
+                        <span>Original</span>
+                    </button>
+
+                    <button class="filter-card" data-filter="mono" type="button">
+                        <span class="filter-preview mono"></span>
+                        <span>Mono</span>
+                    </button>
+
+                    <button class="filter-card" data-filter="vintage" type="button">
+                        <span class="filter-preview vintage"></span>
+                        <span>Vintage</span>
+                    </button>
+
+                    <button class="filter-card" data-filter="cinematic" type="button">
+                        <span class="filter-preview cinematic"></span>
+                        <span>Cinematic</span>
+                    </button>
+
+                    <button class="filter-card" data-filter="warm" type="button">
+                        <span class="filter-preview warm"></span>
+                        <span>Warm</span>
+                    </button>
+
+                    <button class="filter-card" data-filter="cool" type="button">
+                        <span class="filter-preview cool"></span>
+                        <span>Cool</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- LAYERS -->
+            <div class="panel-content" id="layersPanel">
+
+                <div class="layers-header">
+                    <div>
+                        <span class="layers-title">LAYER STACK</span>
+                        <small id="layerCount">0 LAYERS</small>
+                    </div>
+
+                    <div class="layer-header-actions">
+                        <button id="addTextLayer" type="button" title="Add text layer">T＋</button>
+                        <button id="addShapeLayer" type="button" title="Add rectangle layer">□＋</button>
+                    </div>
+                </div>
+
+                <div class="layer-toolbar">
+                    <button type="button" id="duplicateLayerBtn" title="Duplicate selected layer">▢</button>
+                    <button type="button" id="moveLayerUpBtn" title="Move layer up">↑</button>
+                    <button type="button" id="moveLayerDownBtn" title="Move layer down">↓</button>
+                    <button type="button" id="renameLayerBtn" title="Rename selected layer">✎</button>
+                    <button type="button" id="deleteLayerBtn" title="Delete selected layer">⌫</button>
+                </div>
+
+                <div class="layer-list" id="layerList">
+
+                    <!-- JavaScript renders layers here -->
+
+                </div>
+
+                <div class="layer-properties">
+                    <div class="layer-property-heading">
+                        <span>SELECTED LAYER</span>
+                        <span id="selectedLayerType">NONE</span>
+                    </div>
+
+                    <div class="selected-layer-name" id="selectedLayerName">
+                        No layer selected
+                    </div>
+
+                    <div class="layer-property-info">
+                        <span>ORDER</span>
+                        <strong id="selectedLayerOrder">—</strong>
+                    </div>
+                </div>
+
+                <p class="layer-note">
+                    Select a layer to manage it. Use the eye icon to toggle visibility.
+                </p>
+
+            </div>
+
+        </aside>
+
+    </section>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="photo.js"></script>
+
+</body>
+</html>
